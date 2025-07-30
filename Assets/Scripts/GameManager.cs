@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,17 +23,23 @@ public class GameManager : MonoBehaviour
 
     [Header("메모 UI")]
     public Button actingButton;
-    public Button medicineButton;             // 정신개조약
-    public Button feedButton;
-    public Button lightButton;
-    public GameObject actingMemoPopup;
+    public Button[] medicineButton;             // 정신개조약
+    public Button[] feedButton;
+    public Button[] lightButton;
+    public GameObject memberActingMemoPopup;
+
+    [Header("이벤트 시스템")]
+    public EventSO[] events;
+    public GameObject eventPopup;
+    public Text eventTitleText;
+    public Text eventDescriptionText;
+    public Button eventCloseButton;
 
     [Header("게임 상태")]
+    int currentDay;
     public int food = 20;
     public int medicine = 10;
     public int candle = 15;
-
-    int currentDay;
 
     private int[] memberTrust;
     private int[] memberHunger;
@@ -45,14 +52,17 @@ public class GameManager : MonoBehaviour
         InitializeGroup();
         UpdateUI();
 
-        actingMemoPopup.SetActive(false);
-        actingButton.onClick.AddListener(ActingMemo);
+        memberActingMemoPopup.SetActive(false);
+        eventPopup.SetActive(false);
+        actingButton.onClick.AddListener(MemberActingMemo);
         nextDayButton.onClick.AddListener(NextDay);
     }
 
     void UpdateUI()
     {
         dayText.text = $"Day {currentDay}";
+
+        memberActingMemoPopup.SetActive(false);
 
         for (int i = 0; i < groupMembers.Length; i++)
         {
@@ -69,11 +79,27 @@ public class GameManager : MonoBehaviour
         }
 
     }
-    public void ActingMemo()
+    public void MemberActingMemo()
     {
-        actingMemoPopup.SetActive (true);
+        memberActingMemoPopup.SetActive (true);
 
-        
+        for(int i = 0; i < feedButton.Length && i < groupMembers.Length; i++)
+        {
+            int memberIndex = i;
+            feedButton[i].onClick.AddListener(() => UseFoodItem(memberIndex));
+        }
+        for (int i = 0; i < medicineButton.Length && i < groupMembers.Length; i++)
+        {
+            int memberIndex = i;
+            medicineButton[i].onClick.AddListener(() => UseMedicineItem(memberIndex));
+        }
+        for (int i = 0; i < lightButton.Length && i < groupMembers.Length; i++)
+        {
+            int memberIndex = i;
+            lightButton[i].onClick.AddListener(() => UseCandleItem(memberIndex));
+        }
+
+
 
     }
 
@@ -97,18 +123,29 @@ public class GameManager : MonoBehaviour
     public void UseFoodItem(int memberIndex)
     {
         if (food <= 0 || foodItem == null) return;
+        if (memberHunger[memberIndex] <= 0) return;
 
         food--;
-    }
-
-    public void UseMedicineItem()
-    {
+        ApplyItemEffect(memberIndex, foodItem);
 
     }
 
-    public void UseCandleItem()
+    public void UseMedicineItem(int memberIndex)
     {
+        if (medicine <= 0 || medicineItem == null) return;
+        if (memberTrust[memberIndex] <= 0) return;
 
+        medicine--;
+        ApplyItemEffect(memberIndex, medicineItem);
+    }
+
+    public void UseCandleItem(int memberIndex)
+    {
+        if (candle <= 0 || candleItem == null) return;
+        if (memberMental[memberIndex] <= 0) return;
+
+        candle--;
+        ApplyItemEffect(memberIndex, candleItem);
     }
 
     public void NextDay()
@@ -151,12 +188,17 @@ public class GameManager : MonoBehaviour
             float trustMultipilier = member.difficulty == GroupMemberSO.Difficulty.easy ? 0.5f : 1.0f;
             float hungerMultipilier = member.difficulty == GroupMemberSO.Difficulty.easy ? 0.8f : 1.0f;
 
-            memberTrust[i] = Mathf.RoundToInt(doubt * trustMultipilier);
-            memberHunger[i] = Mathf.RoundToInt(baseHungerLoss * hungerMultipilier);
-            memberMental[i] = Mathf.RoundToInt(baseMentalLoss * member.lightEfficiency);
+            memberTrust[i] -= Mathf.RoundToInt(doubt * trustMultipilier);
+            memberHunger[i] -= Mathf.RoundToInt(baseHungerLoss * hungerMultipilier);
+            memberMental[i] -= Mathf.RoundToInt(baseMentalLoss * member.lightEfficiency);
 
-            if (memberHunger[i] <= 0) memberTrust[i] -= 10;
-            if (memberHunger[i] <= 0) memberHunger[i] -= 15;
+
+            if (memberHunger[i] <= 0)
+            {
+                memberTrust[i] -= 10;
+                memberHunger[i] -= 15;
+            }
+
             if (memberMental[i] <= 0) memberTrust[i] -= 20;
 
             memberTrust[i] = Mathf.Max(0, memberTrust[i]);
@@ -165,4 +207,44 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
+    void ApplyEventEffect(EventSO eventSO)
+    {
+        food += eventSO.foodChange;
+        medicine += eventSO.medicineChange;
+        candle += eventSO.candleChange;
+
+        food = Mathf.Max(0, food);
+        medicine = Mathf.Max(0, medicine);
+        candle = Mathf.Max(0, candle);
+
+        for (int i = 0; i < groupMembers.Length; i++)
+        {
+            if (groupMembers[i] != null && memberTrust[i] > 0)
+            {
+                memberTrust[i] += eventSO.trustChange;
+                memberHunger[i] += eventSO.hungerChange;
+                memberMental[i] += eventSO.mentalChange;
+
+                GroupMemberSO member = groupMembers[i];
+                memberTrust[i] = Mathf.Clamp(memberTrust[i], 0, member.maxTrust);
+                memberHunger[i] = Mathf.Clamp(memberHunger[i], 0, member.maxHunger);
+                memberMental[i] = Mathf.Clamp(memberMental[i], 0, member.maxMental);
+            }
+        }
+    }
+
+    void ShowEventPopup(EventSO eventSO)
+    {
+        eventPopup.SetActive(true);
+
+        eventTitleText.text = eventSO.eventTitle;
+        eventDescriptionText.text = eventSO.eventDescription;
+
+        ApplyEventEffect(eventSO);
+
+        nextDayButton.interactable = false;
+    }
+
+   
 }
