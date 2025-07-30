@@ -7,7 +7,7 @@ using UnityEngine.Analytics;
 public class GroupMemberSO : ScriptableObject
 {
     [Header("정보")]
-    public string groupName = "구성원";
+    public string memberName = "구성원";
     public Sprite protrait;
     public Difficulty difficulty = Difficulty.easy;
 
@@ -21,11 +21,12 @@ public class GroupMemberSO : ScriptableObject
 
     [Header("특성")]
     [Range(0f, 30.0f)]
-    public float doubt = 5.0f;        //의심
+    public float trustEfficiency = 5.0f;
+    //public float doubt = 5.0f;        //의심
     [Range(1.0f, 5.0f)]
     public float foodEfficiency = 1.0f;
     [Range(0.0f, 10.0f)]
-    public float light = 1.0f;
+    public float lightEfficiency = 1.0f;
     
     public enum Difficulty
     {

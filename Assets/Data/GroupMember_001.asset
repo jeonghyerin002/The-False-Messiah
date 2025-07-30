@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5a25b5c56a670147923428e3ab9be84, type: 3}
   m_Name: GroupMember_001
   m_EditorClassIdentifier: 
-  groupName: "\uC18D\uC0AD\uC774\uB294 \uC790"
+  memberName: The Whisperer
   protrait: {fileID: 21300000, guid: 2bf1464ae7b9d3b449b4edded3b88569, type: 3}
   difficulty: 1
   maxTrust: 60
   maxHunger: 100
-  maxMental: 10
-  doubt: 5
+  maxMental: 6
+  trustEfficiency: 5
   foodEfficiency: 1
   light: 1
