@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c93796896f7d6da49a43d90e4389cd67, type: 3}
   m_Name: Event_001
   m_EditorClassIdentifier: 
-  eventTitle: "\uC774\uBCA4\uD2B8 \uBC1C\uC0DD!"
-  eventDescription: "\uBB34\uC2A8 \uC77C\uC774 \uC77C\uC5B4\uB0AC\uC2B5\uB2C8\uB2E4"
-  foodChange: 0
-  candleChange: 0
+  eventTitle: "\uC815\uBD80\uC758 \uAC04\uC12D"
+  eventDescription: "\uC815\uBD80\uC758 \uC758\uC2EC\uC774 \uC2DC\uC791 \uB418\uC5C8\uC2B5\uB2C8\uB2E4"
+  foodChange: 5
+  candleChange: -5
   medicineChange: 0
-  trustChange: 0
+  trustChange: -5
   hungerChange: 0
   mentalChange: 0
-  probability: 30
+  probability: 22

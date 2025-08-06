@@ -16,7 +16,7 @@ public class GroupMemberSO : ScriptableObject
     public int maxTrust = 100;
     [Range(0, 100)]
     public int maxHunger = 100;
-    [Range(0, 10)]
+    [Range(0, 100)]
     public int maxMental = 100;
 
     [Header("Æ¯¼º")]

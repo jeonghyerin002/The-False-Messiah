@@ -17,7 +17,7 @@ MonoBehaviour:
   difficulty: 1
   maxTrust: 60
   maxHunger: 100
-  maxMental: 6
+  maxMental: 58
   trustEfficiency: 5
   foodEfficiency: 1
-  light: 1
+  lightEfficiency: 1

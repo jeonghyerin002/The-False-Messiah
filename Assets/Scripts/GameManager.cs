@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public Text dayText;
     public Text[] memberStatusText;
     public Button nextDayButton;
+    public Text inventoryText;
     
 
     [Header("메모 UI")]
@@ -51,18 +52,24 @@ public class GameManager : MonoBehaviour
 
         InitializeGroup();
         UpdateUI();
+        MemberActingMemo();
 
         memberActingMemoPopup.SetActive(false);
         eventPopup.SetActive(false);
-        actingButton.onClick.AddListener(MemberActingMemo);
+        actingButton.onClick.AddListener(MemberActingMemoPopup);
         nextDayButton.onClick.AddListener(NextDay);
+        eventCloseButton.onClick.AddListener(EventCloseButton);
     }
 
     void UpdateUI()
     {
         dayText.text = $"Day {currentDay}";
 
-        memberActingMemoPopup.SetActive(false);
+        inventoryText.text = $"믿음의 약  : {medicine}개 \n" +
+                             $"사과       : {food}개 \n" +
+                             $"양초       : {candle}개 \n";
+
+
 
         for (int i = 0; i < groupMembers.Length; i++)
         {
@@ -75,27 +82,39 @@ public class GameManager : MonoBehaviour
                     $"믿음 : {memberTrust[i]} \n" +
                     $"허기 : {memberHunger[i]} \n" +
                     $"멘탈 : {memberMental[i]} \n";
+
             }
+
         }
 
     }
+
+    public void MemberActingMemoPopup()
+    {
+        memberActingMemoPopup.SetActive(true);
+    }
+
     public void MemberActingMemo()
     {
-        memberActingMemoPopup.SetActive (true);
+        //memberActingMemoPopup.SetActive(true);
 
-        for(int i = 0; i < feedButton.Length && i < groupMembers.Length; i++)
+
+        for (int i = 0; i < feedButton.Length && i < groupMembers.Length; i++)
         {
             int memberIndex = i;
+            feedButton[i].onClick.RemoveAllListeners();
             feedButton[i].onClick.AddListener(() => UseFoodItem(memberIndex));
         }
         for (int i = 0; i < medicineButton.Length && i < groupMembers.Length; i++)
         {
             int memberIndex = i;
+            medicineButton[i].onClick.RemoveAllListeners();
             medicineButton[i].onClick.AddListener(() => UseMedicineItem(memberIndex));
         }
         for (int i = 0; i < lightButton.Length && i < groupMembers.Length; i++)
         {
             int memberIndex = i;
+            lightButton[i].onClick.RemoveAllListeners();
             lightButton[i].onClick.AddListener(() => UseCandleItem(memberIndex));
         }
 
@@ -118,15 +137,30 @@ public class GameManager : MonoBehaviour
         memberTrust[memberIndex] = Mathf.Min(memberTrust[memberIndex], member.maxTrust);
         memberHunger[memberIndex] = Mathf.Min(memberHunger[memberIndex], member.maxHunger);
         memberMental[memberIndex] = Mathf.Min(memberMental[memberIndex], member.maxMental);
+
+        Debug.Log($"[{member.memberName}] 믿음: {memberTrust[memberIndex]}, 허기: {memberHunger[memberIndex]}, 멘탈: {memberMental[memberIndex]}");
+
     }
-  
+
     public void UseFoodItem(int memberIndex)
     {
-        if (food <= 0 || foodItem == null) return;
-        if (memberHunger[memberIndex] <= 0) return;
+        Debug.Log("버튼 클릭 됨");
+        if (food <= 0 || foodItem == null)
+        {
+            Debug.LogWarning("음식 없음");
+            return;
+        }
+        if (memberHunger[memberIndex] <= 0)
+        {
+            Debug.LogWarning("이미 손쓸 수 없음 죽음을 받아드려야함 살 수 있는 방법 같은 건 없음 언제 올지 모를 공포에 덜덜 떨 수 밖에 없음 미리 제사상에 뭐 올리고 싶은지 남아있는 힘으로 유언이라도 작성하는 걸 추천함");
+            return;
+        }
 
         food--;
         ApplyItemEffect(memberIndex, foodItem);
+        UpdateUI();
+
+        Debug.Log("음식 사용 성공적 문제 없음");
 
     }
 
@@ -137,6 +171,7 @@ public class GameManager : MonoBehaviour
 
         medicine--;
         ApplyItemEffect(memberIndex, medicineItem);
+        UpdateUI();
     }
 
     public void UseCandleItem(int memberIndex)
@@ -146,12 +181,16 @@ public class GameManager : MonoBehaviour
 
         candle--;
         ApplyItemEffect(memberIndex, candleItem);
+        UpdateUI();
     }
 
     public void NextDay()
     {
         currentDay += 1;
+        eventPopup.SetActive(true);
+        memberActingMemoPopup.SetActive(false);
         ProcessDailyChange();
+        CheckRandomEvent();
         UpdateUI();
     }
     void InitializeGroup()
@@ -176,8 +215,8 @@ public class GameManager : MonoBehaviour
     void ProcessDailyChange()
     {
         int doubt = 5;
-        int baseHungerLoss = 15;
-        int baseMentalLoss = 10;
+        int baseHungerLoss = 5;
+        int baseMentalLoss = 5;
 
         for (int i = 0; i < groupMembers.Length; i++)
         {
@@ -244,6 +283,41 @@ public class GameManager : MonoBehaviour
         ApplyEventEffect(eventSO);
 
         nextDayButton.interactable = false;
+
+        
+    }
+    void CheckRandomEvent()
+    {
+        int totalProbability = 0;
+
+        //전체 확률 합 구하기
+        for(int i = 0; i < events.Length; i++)
+        {
+            totalProbability += events[i].probability;
+        }
+
+        if (totalProbability == 0)
+            return;
+
+        int roll = Random.Range(1, totalProbability + 1 + 50);
+        int cumualtive = 0;
+
+        for(int i = 0; i < events.Length ; i++)
+        {
+            cumualtive += events[i].probability;
+            if (roll <= cumualtive)
+            {
+                ShowEventPopup(events[i]);
+                return;
+            }
+        }
+    }
+
+    void EventCloseButton()
+    {
+        eventPopup.SetActive(false);
+        nextDayButton.interactable = true;
+        UpdateUI();
     }
 
    
