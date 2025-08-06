@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro.EditorUtilities;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -320,5 +321,19 @@ public class GameManager : MonoBehaviour
         UpdateUI();
     }
 
-   
+   void NormalEnding()
+    {
+        //멤버가 하나라도 남아있는 상황에서
+        //일정 날짜가 지나면 클리어 이벤트가 발생
+        //이벤트 발생 시 노멀엔딩으로 끌려감
+    }
+
+    void BadEnding(GroupMemberSO groupMember)
+    {
+        //이건 아닌데 그 멤버들의 믿음이 모두 0되면 그대로 배드엔딩씬에 끌고가야함.
+        if (groupMember.maxTrust == 0)
+        {
+            SceneManager.LoadScene("EndScene_Bad");
+        }
+    }
 }
