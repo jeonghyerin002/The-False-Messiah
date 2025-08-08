@@ -17,4 +17,4 @@ MonoBehaviour:
   itemType: 1
   foodEffect: 0
   candleEffect: 0
-  medicineEffect: 0
+  medicineEffect: 3

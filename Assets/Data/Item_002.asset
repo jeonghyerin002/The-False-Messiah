@@ -16,5 +16,5 @@ MonoBehaviour:
   ItemIcon: {fileID: 0}
   itemType: 2
   foodEffect: 0
-  candleEffect: 0
+  candleEffect: 5
   medicineEffect: 0

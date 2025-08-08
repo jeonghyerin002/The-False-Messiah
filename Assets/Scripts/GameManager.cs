@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     public Text eventTitleText;
     public Text eventDescriptionText;
     public Button eventCloseButton;
+    public Image eventImage;
 
     [Header("게임 상태")]
     int currentDay;
@@ -66,9 +67,9 @@ public class GameManager : MonoBehaviour
     {
         dayText.text = $"Day {currentDay}";
 
-        inventoryText.text = $"믿음의 약  : {medicine}개 \n" +
-                             $"사과       : {food}개 \n" +
-                             $"양초       : {candle}개 \n";
+        inventoryText.text = $"사과  : {food}개   " +
+            $"믿음의 약  : {medicine}개   " +
+                             $"양초  : {candle}개";
 
 
 
@@ -80,8 +81,8 @@ public class GameManager : MonoBehaviour
 
                 memberStatusText[i].text =
                     $"{member.memberName} \n" +
-                    $"믿음 : {memberTrust[i]} \n" +
                     $"허기 : {memberHunger[i]} \n" +
+                    $"믿음 : {memberTrust[i]} \n" +
                     $"멘탈 : {memberMental[i]} \n";
 
             }
@@ -281,11 +282,22 @@ public class GameManager : MonoBehaviour
         eventTitleText.text = eventSO.eventTitle;
         eventDescriptionText.text = eventSO.eventDescription;
 
+        if (eventImage != null && eventSO.image != null)
+        {
+            eventImage.sprite = eventSO.image;
+            eventImage.gameObject.SetActive(true);
+        }
+        else if (eventImage == null)
+        {
+            eventImage.gameObject.SetActive(false);
+        }
+
         ApplyEventEffect(eventSO);
 
         nextDayButton.interactable = false;
+        actingButton.interactable = false;
 
-        
+
     }
     void CheckRandomEvent()
     {
@@ -318,6 +330,7 @@ public class GameManager : MonoBehaviour
     {
         eventPopup.SetActive(false);
         nextDayButton.interactable = true;
+        actingButton.interactable = true;
         UpdateUI();
     }
 

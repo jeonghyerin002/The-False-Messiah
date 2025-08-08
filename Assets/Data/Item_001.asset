@@ -15,6 +15,6 @@ MonoBehaviour:
   ItemName: "\uC2DD\uB7C9"
   ItemIcon: {fileID: 0}
   itemType: 0
-  foodEffect: 0
+  foodEffect: 3
   candleEffect: 0
   medicineEffect: 0

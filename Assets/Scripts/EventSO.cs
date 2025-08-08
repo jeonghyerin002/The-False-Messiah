@@ -9,6 +9,7 @@ public class EventSO : ScriptableObject
     public string eventTitle = "이벤트 발생!";
     [TextArea(3, 5)]
     public string eventDescription = "무슨 일이 일어났습니다";
+    public Sprite image;
 
     [Header("자원 변화")]
     public int foodChange = 0;
