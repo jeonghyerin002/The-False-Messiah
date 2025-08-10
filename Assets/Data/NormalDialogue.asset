@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ac14ca003a8fc94cb9a1d52894aa396, type: 3}
+  m_Name: NormalDialogue
+  m_EditorClassIdentifier: 
+  dialogueLines:
+  - "\uC758\uC2DD\uC740 \uC2E4\uD328\uB85C \uB05D\uB0AC\uC9C0\uB9CC, \uC544\uC9C1
+    \uC2E0\uB3C4\uB4E4\uC740 \uB0A8\uC544 \uC788\uC5C8\uB2E4."
+  - "\uADF8\uB4E4\uC740 \uAD50\uC8FC\uC758 \uAC00\uB974\uCE68\uC744 \uAC00\uC2B4
+    \uAE4A\uC774 \uC0C8\uAE30\uACE0 \uC788\uC5C8\uB2E4."
+  - "\uD3D0\uD5C8\uAC00 \uB41C \uC131\uC18C\uB97C \uB4A4\uB85C \uD558\uACE0, \uC0DD\uC874\uC790\uB4E4\uC740
+    \uC5B4\uB518\uAC00\uB85C \uC0AC\uB77C\uC84C\uB2E4."
+  - "\uC5BC\uB9C8 \uD6C4, \uBA3C \uB9C8\uC744\uC5D0\uC11C \uC775\uC219\uD55C \uC18D\uC0AD\uC784\uC774
+    \uB4E4\uB824\uC624\uAE30 \uC2DC\uC791\uD588\uB2E4."
+  - "\uC5BC\uB9C8 \uD6C4, \uBA3C \uB9C8\uC744\uC5D0\uC11C \uC775\uC219\uD55C \uC18D\uC0AD\uC784\uC774
+    \uB4E4\uB824\uC624\uAE30 \uC2DC\uC791\uD588\uB2E4."

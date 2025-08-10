@@ -21,4 +21,4 @@ MonoBehaviour:
   trustChange: 0
   hungerChange: 0
   mentalChange: 0
-  probability: 60
+  probability: 50

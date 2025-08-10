@@ -21,5 +21,5 @@ MonoBehaviour:
   medicineChange: 0
   trustChange: -5
   hungerChange: -10
-  mentalChange: -20
-  probability: 14
+  mentalChange: -10
+  probability: 20

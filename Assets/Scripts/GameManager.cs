@@ -21,6 +21,10 @@ public class GameManager : MonoBehaviour
     public Text[] memberStatusText;
     public Button nextDayButton;
     public Text inventoryText;
+    public Image fadePanel;
+
+    [Header("멤버 초상화 UI")]
+    public Image[] memberProtraits;
     
 
     [Header("메모 UI")]
@@ -55,6 +59,11 @@ public class GameManager : MonoBehaviour
         InitializeGroup();
         UpdateUI();
         MemberActingMemo();
+        
+        if(fadePanel != null)
+        {
+            fadePanel.color = new Color(0f, 0f, 0f, 0f);
+        }
 
         memberActingMemoPopup.SetActive(false);
         eventPopup.SetActive(false);
@@ -84,6 +93,30 @@ public class GameManager : MonoBehaviour
                     $"허기 : {memberHunger[i]} \n" +
                     $"믿음 : {memberTrust[i]} \n" +
                     $"멘탈 : {memberMental[i]} \n";
+
+                // 믿음 수치에 따라 초상화 밝기 조절
+                if (memberProtraits != null && i < memberProtraits.Length && memberProtraits[i] != null)
+                {
+                    float trustPercent = (float)memberTrust[i] / member.maxTrust;
+
+                    if (memberTrust[i] <= 0)
+                    {
+                        //완전히 사라짐
+                        memberProtraits[i].color = new Color(0f, 0f, 0f, 1f);
+                    }
+                    else if (memberTrust[i] <= 20)
+                    {
+                        //20부터 서서히 어두워짐
+                        float fade = Mathf.Clamp01(trustPercent / 0.2f); //0-20% 구간
+                        memberProtraits[i].color = new Color(fade, fade, fade, 1f);
+                    }
+                    else
+                    {
+                        //정상
+                        memberProtraits[i].color = Color.white;
+                    }
+
+                }
 
             }
 
@@ -194,6 +227,9 @@ public class GameManager : MonoBehaviour
         ProcessDailyChange();
         CheckRandomEvent();
         UpdateUI();
+
+        CheckEndingScene();
+
     }
     void InitializeGroup()
     {
@@ -334,19 +370,61 @@ public class GameManager : MonoBehaviour
         UpdateUI();
     }
 
+    void CheckEndingScene()
+    {
+        bool hasFaithMember = false;
+        bool allfaithZero = true;
+
+        for (int i = 0; i < memberTrust.Length; i++)
+        {
+            if (memberTrust[i] >  0) hasFaithMember = true;
+            if (memberTrust[i] > 0) allfaithZero = false;
+        }
+        if(currentDay >= 60 && hasFaithMember)
+        {
+            NormalEnding();
+        }
+        else if (allfaithZero)
+        {
+            BadEnding();
+        }
+    }
    void NormalEnding()
     {
-        //멤버가 하나라도 남아있는 상황에서
-        //일정 날짜가 지나면 클리어 이벤트가 발생
-        //이벤트 발생 시 노멀엔딩으로 끌려감
+        StartCoroutine(FadeAndLoadScene("EndScene_Normal"));
     }
 
-    void BadEnding(GroupMemberSO groupMember)
+    void BadEnding()
     {
-        //이건 아닌데 그 멤버들의 믿음이 모두 0되면 그대로 배드엔딩씬에 끌고가야함.
-        if (groupMember.maxTrust == 0)
+        StartCoroutine(FadeAndLoadScene("EndScene_Bad"));
+    }
+
+    IEnumerator FadeAndLoadScene(string sceneName)
+    {
+        //버튼 상호작용 불가
+        nextDayButton.interactable = false;
+        actingButton.interactable = false;
+
+        if (eventPopup != null)
         {
-            SceneManager.LoadScene("EndScene_Bad");
+            eventPopup.SetActive(false);
+        }    
+        if (memberActingMemoPopup != null)
+            memberActingMemoPopup.SetActive(false);
+
+        float duration = 3f;
+        float timer = 0f;
+        Color c = fadePanel.color;
+
+        //점점 어두워짐
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            float alpha = Mathf.Lerp(0f, 1f, timer / duration);
+            fadePanel.color = new Color(c.r, c.g, c.b, alpha);
+            yield return null;
         }
+
+        SceneManager.LoadScene(sceneName);
     }
 }
