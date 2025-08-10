@@ -67,8 +67,8 @@ public class GameManager : MonoBehaviour
     {
         dayText.text = $"Day {currentDay}";
 
-        inventoryText.text = $"사과  : {food}개   " +
-            $"믿음의 약  : {medicine}개   " +
+        inventoryText.text = $"사과  : {food}개       " +
+            $"믿음의 약  : {medicine}개       " +
                              $"양초  : {candle}개";
 
 
