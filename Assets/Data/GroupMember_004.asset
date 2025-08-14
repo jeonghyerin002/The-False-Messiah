@@ -15,9 +15,9 @@ MonoBehaviour:
   memberName: The Yonng Disciple
   protrait: {fileID: 21300000, guid: 01f5307d91af8554bacff81e18a1ccd1, type: 3}
   difficulty: 1
-  maxTrust: 80
+  maxTrust: 100
   maxHunger: 100
-  maxMental: 82
+  maxMental: 100
   trustEfficiency: 5
   foodEfficiency: 1
-  lightEfficiency: 1
+  lightEfficiency: 3

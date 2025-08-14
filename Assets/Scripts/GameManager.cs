@@ -4,6 +4,7 @@ using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,10 +18,10 @@ public class GameManager : MonoBehaviour
 
 
     [Header("참조 UI")]
-    public Text dayText;
-    public Text[] memberStatusText;
+    public TextMeshProUGUI dayText;
+    public TextMeshProUGUI[] memberStatusText;
     public Button nextDayButton;
-    public Text inventoryText;
+    public TextMeshProUGUI inventoryText;
     public Image fadePanel;
 
     [Header("멤버 초상화 UI")]
@@ -37,8 +38,8 @@ public class GameManager : MonoBehaviour
     [Header("이벤트 시스템")]
     public EventSO[] events;
     public GameObject eventPopup;
-    public Text eventTitleText;
-    public Text eventDescriptionText;
+    public TextMeshProUGUI eventTitleText;
+    public TextMeshProUGUI eventDescriptionText;
     public Button eventCloseButton;
     public Image eventImage;
 
@@ -180,16 +181,9 @@ public class GameManager : MonoBehaviour
     public void UseFoodItem(int memberIndex)
     {
         Debug.Log("버튼 클릭 됨");
-        if (food <= 0 || foodItem == null)
-        {
-            Debug.LogWarning("음식 없음");
-            return;
-        }
-        if (memberHunger[memberIndex] <= 0)
-        {
-            Debug.LogWarning("이미 손쓸 수 없음 죽음을 받아드려야함 살 수 있는 방법 같은 건 없음 언제 올지 모를 공포에 덜덜 떨 수 밖에 없음 미리 제사상에 뭐 올리고 싶은지 남아있는 힘으로 유언이라도 작성하는 걸 추천함");
-            return;
-        }
+        if (food <= 0 || foodItem == null) return;
+        
+        if (memberHunger[memberIndex] <= 0) return;
 
         food--;
         ApplyItemEffect(memberIndex, foodItem);
@@ -202,10 +196,12 @@ public class GameManager : MonoBehaviour
     public void UseMedicineItem(int memberIndex)
     {
         if (medicine <= 0 || medicineItem == null) return;
+
         if (memberTrust[memberIndex] <= 0) return;
 
-        medicine--;
+       
         ApplyItemEffect(memberIndex, medicineItem);
+        medicine--;
         UpdateUI();
     }
 
@@ -380,7 +376,7 @@ public class GameManager : MonoBehaviour
             if (memberTrust[i] >  0) hasFaithMember = true;
             if (memberTrust[i] > 0) allfaithZero = false;
         }
-        if(currentDay >= 60 && hasFaithMember)
+        if(currentDay >= 30 && hasFaithMember)
         {
             NormalEnding();
         }

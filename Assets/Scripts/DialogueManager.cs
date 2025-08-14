@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
-
     [Header("UI요소 - Inspector에서 연결")]
     public GameObject DialoguePanel;
     public TextMeshProUGUI dialogueText;
@@ -17,7 +16,7 @@ public class DialogueManager : MonoBehaviour
     public float typingSpeed = 0.05f;
     public bool skipTypingOnClick = true;
 
-    private EndDialogeDataSO currentDialogue;
+    public EndDialogeDataSO currentDialogue;
     private int currentLineIndex = 0;
     private bool isDialogueActive = false;
     private bool isTyping = false;
@@ -52,13 +51,13 @@ public class DialogueManager : MonoBehaviour
     }
     void ShowCurrentLine()
     {
-        if (currentDialogue != null && currentLineIndex < currentDialogue.dialogueLines.Count)
+        if (currentDialogue != null && currentLineIndex < currentDialogue.dialogueLines.Count && typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine);
         }
         //현재 줄의 대화 내용으로 타이필 효과 시작
         string currentText = currentDialogue.dialogueLines[currentLineIndex];
-        typingCoroutine = StartCoroutine(currentText);
+        typingCoroutine = StartCoroutine(TypeText(currentText));
     }
     
     void EndDialogue()
@@ -73,6 +72,8 @@ public class DialogueManager : MonoBehaviour
         isTyping = false;
         DialoguePanel.SetActive(false);
         currentLineIndex = 0;
+
+        SceneManager.LoadScene("StartScene");
     }
     public void ShowNextLine()
     {
@@ -95,7 +96,7 @@ public class DialogueManager : MonoBehaviour
         }
         else if(!isTyping)
         {
-            ShowCurrentLine();
+            ShowNextLine();
         }
         
     }
@@ -126,6 +127,7 @@ public class DialogueManager : MonoBehaviour
     {
         DialoguePanel.SetActive(false);
         nextButton.onClick.AddListener(HandleNextInput);
+        StartDialogue(currentDialogue);
     }
     private void Update()
     {

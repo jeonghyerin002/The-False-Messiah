@@ -20,6 +20,6 @@ MonoBehaviour:
   candleChange: 0
   medicineChange: 0
   trustChange: -5
-  hungerChange: -10
+  hungerChange: -17
   mentalChange: -10
-  probability: 20
+  probability: 7

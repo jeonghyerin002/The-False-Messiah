@@ -15,9 +15,9 @@ MonoBehaviour:
   memberName: The Whisperer
   protrait: {fileID: 21300000, guid: 2bf1464ae7b9d3b449b4edded3b88569, type: 3}
   difficulty: 1
-  maxTrust: 60
+  maxTrust: 100
   maxHunger: 100
-  maxMental: 58
-  trustEfficiency: 5
-  foodEfficiency: 1
+  maxMental: 100
+  trustEfficiency: 7
+  foodEfficiency: 3
   lightEfficiency: 1

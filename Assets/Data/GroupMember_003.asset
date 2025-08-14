@@ -15,9 +15,9 @@ MonoBehaviour:
   memberName: The Devout
   protrait: {fileID: 21300000, guid: af4049b00fd8bff48b9f4b250a145875, type: 3}
   difficulty: 0
-  maxTrust: 80
+  maxTrust: 100
   maxHunger: 100
-  maxMental: 42
-  trustEfficiency: 5
-  foodEfficiency: 1
-  lightEfficiency: 1
+  maxMental: 100
+  trustEfficiency: 6
+  foodEfficiency: 2
+  lightEfficiency: 2

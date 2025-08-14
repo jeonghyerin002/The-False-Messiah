@@ -16,10 +16,10 @@ MonoBehaviour:
   eventDescription: "\uC2E0\uC790\uAC00 \uB300\uD615 \uB9C8\uD2B8\uC5D0\uC11C \uC790\uC6D0\uC744
     \uD6D4\uCE58\uB294\uB370 \uC131\uACF5\uD588\uC2B5\uB2C8\uB2E4"
   image: {fileID: 21300000, guid: ddff76e78f106ec44a2a996ded11a36c, type: 3}
-  foodChange: 10
+  foodChange: 15
   candleChange: 10
   medicineChange: 5
   trustChange: 0
-  hungerChange: 5
-  mentalChange: 5
-  probability: 20
+  hungerChange: -5
+  mentalChange: 0
+  probability: 12
