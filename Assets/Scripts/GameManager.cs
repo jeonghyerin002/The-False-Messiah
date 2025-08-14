@@ -180,7 +180,7 @@ public class GameManager : MonoBehaviour
 
     public void UseFoodItem(int memberIndex)
     {
-        Debug.Log("버튼 클릭 됨");
+
         if (food <= 0 || foodItem == null) return;
         
         if (memberHunger[memberIndex] <= 0) return;
@@ -189,7 +189,6 @@ public class GameManager : MonoBehaviour
         ApplyItemEffect(memberIndex, foodItem);
         UpdateUI();
 
-        Debug.Log("음식 사용 성공적 문제 없음");
 
     }
 
@@ -376,7 +375,7 @@ public class GameManager : MonoBehaviour
             if (memberTrust[i] >  0) hasFaithMember = true;
             if (memberTrust[i] > 0) allfaithZero = false;
         }
-        if(currentDay >= 30 && hasFaithMember)
+        if(currentDay >= 20 && hasFaithMember)
         {
             NormalEnding();
         }
@@ -423,4 +422,5 @@ public class GameManager : MonoBehaviour
 
         SceneManager.LoadScene(sceneName);
     }
+   
 }
